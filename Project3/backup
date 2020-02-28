@@ -1,0 +1,48 @@
+#!/bin/bash
+if test  $# -eq 0
+then 
+	echo "Must provide an argument"
+	exit 1
+fi
+if test ! -e ~/backup
+then
+	mkdir ~/backup
+	echo "Backup directory has been created"
+fi
+
+for i
+do
+
+	if [[ -f "$i" ]]
+	then
+		echo "Copying files to the backup directory"
+		cp "$i" ~/backup
+	elif [[ -d "$i" ]]
+	then 
+		echo "Copying directory to the backup directory"
+		cp -R "$i" ~/backup
+
+	elif  test "$i" = "-c"
+	then
+		echo "The number of files and directories in backup is: "
+		ls ~/backup | wc -l
+		echo "The amount of bytes those files consume is: "
+		du -b ~/backup
+
+	elif test "$i" = "-l"
+	then
+		echo "The files and directories in backup are"
+		ls ~/backup
+
+	elif  test "$i" = "--help"
+	then
+		echo "To run this script type \"./backup targetFileList [options]\" where [options include -c, -l, and --help."
+		echo "-c will show the number of files and directories in backup, along with the amount of bytes they consume."
+		echo "-l lists files and directories of the backup subdirectory"
+		echo "--help shows you how to run the script and what each option does"
+
+	else 
+		echo ""$i" does not exist!"
+	fi
+done
+
